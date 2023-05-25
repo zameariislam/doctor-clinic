@@ -6,7 +6,7 @@ import BookingModal from '../../../components/BookingModal';
 const AvailableAppoinment = ({ selected }) => {
 
     const [appoinmentOptions, setAppoinmentOptions] = useState([])
-    const [treatment, setTreatment] = useState({})
+    const [treatment, setTreatment] = useState(null)
 
 
     useEffect(() => {
@@ -30,7 +30,11 @@ const AvailableAppoinment = ({ selected }) => {
                         option={option} />)
                 }
             </div>
-            <BookingModal treatment={treatment} ></BookingModal>
+            {
+                treatment && <BookingModal treatment={treatment}
+                setTreatment={setTreatment}
+                 selected={selected} ></BookingModal>
+            }
 
         </section>
     );
