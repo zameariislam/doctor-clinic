@@ -4,6 +4,8 @@ import InfoCards from '../InfoCards/InfoCards';
 import Services from '../Services/Services';
 import MakeAppoinment from '../MakeAppoinment/MakeAppoinment';
 import Testimonial from '../Testimonial/Testimonial';
+import SendMessage from '../ContactUs/SendMessage';
+
 
 
 const Home = () => {
@@ -12,8 +14,12 @@ const Home = () => {
             <Banner />
             <InfoCards />
             <Services />
-            <MakeAppoinment/>
-            <Testimonial/>
+            <MakeAppoinment />
+            <Testimonial />
+            <SendMessage />
+
+
+
 
         </div>
     );
