@@ -1,12 +1,38 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { format } from 'date-fns';
+import AppoinmentOption from '../AppoinmentOption/AppoinmentOption';
+import BookingModal from '../../../components/BookingModal';
 
 const AvailableAppoinment = ({ selected }) => {
+
+    const [appoinmentOptions, setAppoinmentOptions] = useState([])
+    const [treatment, setTreatment] = useState({})
+
+
+    useEffect(() => {
+        fetch('appoinmentOptions.json')
+            .then(res => res.json())
+            .then(data => setAppoinmentOptions(data))
+
+
+    }, [])
+
+
     return (
-        <div className='mt-16'>
+        <section className='mt-16'>
             <p className='text-secondary text-center font-bold'>Available Services on {format(selected, "PP")}</p>
 
-        </div>
+
+            <div className='grid gap-6 grid-cols-1  md:grid-cols-2 lg:grid-cols-3 '>
+                {
+                    appoinmentOptions.map(option => <AppoinmentOption key={option._id}
+                        setTreatment={setTreatment}
+                        option={option} />)
+                }
+            </div>
+            <BookingModal treatment={treatment} ></BookingModal>
+
+        </section>
     );
 };
 

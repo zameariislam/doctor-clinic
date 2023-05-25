@@ -8,7 +8,7 @@ const Appoinment = () => {
 
 
     return (
-        <div className='my-16 bg-red-200'>
+        <div className='my-16 '>
             <AppoinmentBanner selected={selected} setSelected={setSelected} />
             <AvailableAppoinment selected={selected} />
 
