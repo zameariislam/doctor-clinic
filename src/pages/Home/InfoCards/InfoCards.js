@@ -1,5 +1,7 @@
 import React from 'react';
-import clock from '../../../assets/images/people2.png'
+import clock from '../../../assets/icons/clock.svg'
+import marker from '../../../assets/icons/marker.svg'
+import phone from '../../../assets/icons/phone.svg'
 
 import InfoCard from './InfoCard';
 
@@ -11,21 +13,21 @@ const InfoCards = () => {
             name: 'Opening Hours',
             description: " Open 9am to 5 pm everyday",
             icon: clock,
-            bgColor: "bg-primary"
+            bgColor: "bg-gradient-to-r from-primary to-secondary"
         },
         {
             id: 2,
             name: 'Visit our location',
             description: " Brooklyn, NY 10036, United States",
-            icon: clock,
-            bgColor: "bg-secondary"
+            icon: marker,
+            bgColor: "bg-gradient-to-r from-primary to-secondary"
         },
 
         {
             id: 3,
             name: 'Contact us now',
             description: " +000 123 456789",
-            icon: clock,
+            icon: phone,
             bgColor: "bg-neutral"
         },
 
