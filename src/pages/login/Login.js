@@ -1,14 +1,32 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 
-import { useState } from "react";
+
 import { useForm } from "react-hook-form";
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../contexts/AuthProvider';
 const Login = () => {
-    const { register, handleSubmit, watch, formState: { errors } } = useForm();
-    const [data, setData] = useState("");
-    
-    const onSubmit = data => console.log(data);
+    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { signin } = useContext(AuthContext)
+    const navigate = useNavigate()
+    const location = useLocation()
+    const from = location.state?.from?.pathname || '/'
+
+
+    const handleLogin = (data) => {
+        const { email, password } = data
+
+        signin(email, password)
+            .then(result => {
+                if (result.user?.email) {
+                    navigate(from, { replace: true })
+
+                }
+
+            })
+            .catch(err => console.log(err.message))
+
+    }
 
 
 
@@ -18,17 +36,20 @@ const Login = () => {
 
             <div className='shadow-lg p-10'>
                 <h2 className='text-3xl text-center mb-3'>Login</h2>
-                
 
-                <form form onSubmit={handleSubmit(onSubmit)}>
+
+                <form form onSubmit={handleSubmit(handleLogin)}>
                     <div className="form-control w-full ">
                         <label className="label">
                             <span className="label-text">Eamil</span>
 
                         </label>
 
-                        <input {...register("email")} type="email" placeholder="Email here"
+                        <input
+                            {...register("email", { required: "Email Address is required" })}
+                            type="email" placeholder="Email here"
                             className="input input-bordered w-full max-w-[400px]" />
+                        {errors.email && <p className='text-red-500' >{errors.email?.message}</p>}
 
                     </div>
                     <div className="form-control w-full ">
@@ -37,8 +58,17 @@ const Login = () => {
 
                         </label>
 
-                        <input {...register("password")} type="password" placeholder="Password here"
+                        <input
+                            {...register("password",
+                                {
+                                    required: "Password is required",
+                                    minLength: { value: 6, message: 'password must be 6 character or longer' }
+                                }
+                            )}
+                            type="password" placeholder="Password here"
                             className="input input-bordered w-full max-w-[400px]" />
+                        {errors.password && <p className='text-red-500' >{errors.password?.message}</p>}
+
                         <label className="label">
                             <span className="label-text">Forget Password ?</span>
 
@@ -47,6 +77,11 @@ const Login = () => {
                         <input type="submit" value="LOGIN"
                             className="  mt-3 btn btn-primary input input-bordered w-full
                              max-w-[400px]" />
+
+
+
+
+
                         <p>New to Doctors Clinic ? <Link to={'/signup'}><span className='text-secondary  cursor-pointer'>Create new account</span></Link> </p>
                         <div className="divider">OR</div>
                         <button className='btn  ' > CONTINUE WITH GOOGLE </button>
@@ -54,7 +89,7 @@ const Login = () => {
 
 
                     </div>
-                    <p>{data}</p>
+
 
 
 
