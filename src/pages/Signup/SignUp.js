@@ -1,13 +1,15 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthProvider';
+import { toast } from 'react-hot-toast';
 
 const SignUp = () => {
-    const { createUser } = useContext(AuthContext)
+    const { createUser, updateUserProfile, signInWithGoogle } = useContext(AuthContext)
     const navigate = useNavigate()
     const location = useLocation()
+    const [signupError, setSignupError] = useState("")
     const from = location.state?.from?.pathname || '/'
 
 
@@ -18,19 +20,58 @@ const SignUp = () => {
     const handleSignUp = (data) => {
         const { name, email, password } = data
         console.log(data)
+        setSignupError("")
 
         createUser(email, password)
             .then(result => {
                 if (result.user?.email) {
-                    // navigate(from, { replace: true })
-                    navigate('/login')
+                    toast('User created Successfully')
+
+                    updateUserProfile(name)
+                        .then(() => {
+                            navigate(from, { replace: true })
+                            toast('User Updated Successfully')
+                            
+
+                        })
+                        .catch(err => {
+                            console.log(err.message)
+                            setSignupError(err.message)
+                        })
+
                 }
 
             })
-            .catch(err => console.log(err.message))
+            .catch(err => {
+                setSignupError(err.message)
+                // console.log(err.message)
+
+            })
 
 
     };
+
+
+    const handleGooleSignIn = () => {
+        setSignupError(' ')
+
+        signInWithGoogle()
+            .then(result => {
+                const user = result.user;
+                console.log(user)
+                toast('SignIn With Google Successfully')
+                navigate(from, { replace: true })
+
+
+            })
+            .catch(err => {
+                setSignupError(err.message)
+            })
+
+        console.log('hello')
+    }
+
+
     return (
         <div className='h-[800px] flex justify-center items-center  '>
 
@@ -100,7 +141,7 @@ const SignUp = () => {
                              max-w-[400px]" />
                         <p> Already have account ? <Link to={'/login'}><span className='text-secondary  cursor-pointer'>please login</span></Link> </p>
                         <div className="divider">OR</div>
-                        <button className='btn  ' > CONTINUE WITH GOOGLE </button>
+
 
 
 
@@ -110,6 +151,8 @@ const SignUp = () => {
 
 
                 </form>
+                <button onClick={handleGooleSignIn} className='btn w-full  ' > CONTINUE WITH GOOGLE </button>
+                {signupError && <p className='text-red-500' >{signupError}</p>}
             </div>
 
 

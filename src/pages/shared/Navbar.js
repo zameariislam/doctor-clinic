@@ -1,18 +1,24 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthProvider';
+import { toast } from 'react-hot-toast';
 
 const Navbar = () => {
 
     const { user, logout } = useContext(AuthContext)
-    // console.log(user?.uid)
+    console.log(user?.displayName)
 
-    // const handleLogout=()=>{
+    const handleLogout = () => {
 
-        
-    //     logout()
+        logout()
+            .then()
+            .catch(err => {
+                toast('LogOut successfully')
 
-    // }
+                console.log(err.message)
+            })
+
+    }
 
 
     const menuItems = <>
@@ -21,9 +27,17 @@ const Navbar = () => {
         <li><Link to={'/appoinment'}>Appoinment</Link></li>
         <li><Link to={'/reviews'}>Reviews</Link></li>
         <li  ><Link to={'/contact'}>Contact Us</Link></li>
+        <li  ><Link to={'/dashboard'}>DashBoard</Link></li>
 
-        {user?.uid ? <button  onClick={logout} ><Link to={'/'}>LogOut</Link></button>
-         : <li><Link to={'/login'}>Login</Link></li>}
+        {user?.uid ?
+            <>
+                <button onClick={handleLogout} >LogOut</button>
+                {/* <li className='text-primary' > {user?.displayName}</li> */}
+
+            </>
+
+
+            : <li><Link to={'/login'}>Login</Link></li>}
 
 
 

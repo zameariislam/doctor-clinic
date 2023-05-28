@@ -5,10 +5,12 @@ import React, { useContext, useState } from 'react';
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthProvider';
+import { toast } from 'react-hot-toast';
 const Login = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [loginError, setLoginError] = useState('')
-    const { signin } = useContext(AuthContext)
+    const { signin,signInWithGoogle  } = useContext(AuthContext)
+    const [signupError, setSignupError] = useState("")
     const navigate = useNavigate()
     const location = useLocation()
     const from = location.state?.from?.pathname || '/'
@@ -32,6 +34,26 @@ const Login = () => {
             })
 
     }
+
+    const handleGooleSignIn = () => {
+        setSignupError(' ')
+
+        signInWithGoogle()
+            .then(result => {
+                const user = result.user;
+                console.log(user)
+                toast('SignIn With Google Successfully')
+                navigate(from, { replace: true })
+
+
+            })
+            .catch(err => {
+                setSignupError(err.message)
+            })
+
+       
+    }
+
 
 
 
@@ -89,8 +111,7 @@ const Login = () => {
 
                         <p>New to Doctors Clinic ? <Link to={'/signup'}><span className='text-secondary  cursor-pointer'>Create new account</span></Link> </p>
                         <div className="divider">OR</div>
-                        <button className='btn  ' > CONTINUE WITH GOOGLE </button>
-                        {loginError && <p className='text-red-500' >{loginError}</p>}
+                        
 
 
 
@@ -100,6 +121,8 @@ const Login = () => {
 
 
                 </form>
+                <button onClick={handleGooleSignIn} className='btn w-full  ' > CONTINUE WITH GOOGLE </button>
+                {signupError && <p className='text-red-500' >{signupError}</p>}
             </div>
 
 
