@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 
 
 
@@ -7,6 +7,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthProvider';
 const Login = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
+    const [loginError, setLoginError] = useState('')
     const { signin } = useContext(AuthContext)
     const navigate = useNavigate()
     const location = useLocation()
@@ -15,6 +16,7 @@ const Login = () => {
 
     const handleLogin = (data) => {
         const { email, password } = data
+        setLoginError(' ')
 
         signin(email, password)
             .then(result => {
@@ -24,7 +26,10 @@ const Login = () => {
                 }
 
             })
-            .catch(err => console.log(err.message))
+            .catch(err => {
+                // console.log(err.message)
+                setLoginError(err.message)
+            })
 
     }
 
@@ -85,6 +90,7 @@ const Login = () => {
                         <p>New to Doctors Clinic ? <Link to={'/signup'}><span className='text-secondary  cursor-pointer'>Create new account</span></Link> </p>
                         <div className="divider">OR</div>
                         <button className='btn  ' > CONTINUE WITH GOOGLE </button>
+                        {loginError && <p className='text-red-500' >{loginError}</p>}
 
 
 

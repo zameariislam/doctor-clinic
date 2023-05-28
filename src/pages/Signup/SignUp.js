@@ -22,7 +22,8 @@ const SignUp = () => {
         createUser(email, password)
             .then(result => {
                 if (result.user?.email) {
-                    navigate(from, { replace: true })
+                    // navigate(from, { replace: true })
+                    navigate('/login')
                 }
 
             })
